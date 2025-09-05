@@ -1,173 +1,266 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
+:root {
+  --nav-height: 75px;
+  --fab-gap: 20px; /* space above nav for FAB */
+  --primary: #4F46E5;
+}
+
+* { box-sizing: border-box; }
+
 body {
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #111827; /* Darker background for contrast */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #111827;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
 }
 
 #root {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+/* Phone frame */
 .phone-container {
-    width: 390px;
-    height: 844px;
-    background-color: #FFFFFF;
-    border-radius: 40px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-    overflow: hidden;
-    position: relative;
-    border: 8px solid #111;
+  width: 390px;
+  height: 844px;
+  background-color: #ffffff;
+  border-radius: 40px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  position: relative;
+  border: 8px solid #111;
+  display: flex;
+  flex-direction: column; /* stack header -> content -> nav */
+  overflow: hidden;
 }
 
-.safeArea { flex: 1; display: flex; flex-direction: column; background-color: #F9FAFB; }
-.container { flex: 1; background: linear-gradient(to bottom, #FFFFFF, #F9FAFB); display: flex; flex-direction: column; }
-.header { padding: 20px; background-color: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,0.02); z-index: 10; }
+/* Scrollable app area */
+.safeArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #F9FAFB;
+  overflow-y: auto;            /* main scrolling surface */
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(var(--nav-height) + 40px); /* avoid nav overlap */
+}
+
+.container {
+  flex: 1;
+  background: linear-gradient(to bottom, #FFFFFF, #F9FAFB);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header, .appHeader {
+  background-color: #FFFFFF;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  z-index: 10;
+}
+
+.header { padding: 20px; }
 .headerTitle { font-size: 28px; font-weight: 800; color: #111827; }
 .headerSubtitle { font-size: 15px; color: #6B7280; }
 
-/*
- * --- START OF ADDED STYLES ---
- * These are the new styles for the Google News-style header
- */
 .appHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    background-color: #FFFFFF;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-    z-index: 10;
-    height: 60px; /* Giving it a fixed height */
-    box-sizing: border-box; /* Ensures padding is included in the height */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+}
+.headerLogoTitle { font-size: 22px; font-weight: 800; color: #111827; }
+.headerIcon { cursor: pointer; padding: 5px; }
+
+/* Map */
+.map-container {
+  width: 100%;
+  height: 350px; /* kept fixed like original */
+  background-color: #E5E7EB;
+  position: relative;
+  z-index: 1;
 }
 
-.headerLogoTitle {
-    font-size: 22px;
-    font-weight: 800;
-    color: #111827;
+/* Carousel */
+.carouselContainer { background-color: #FFFFFF; padding: 20px 0; }
+.carouselTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin-left: 20px;
+  margin-bottom: 15px;
 }
-
-.headerIcon {
-    cursor: pointer;
-    padding: 5px;
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
 }
-/* --- END OF ADDED STYLES --- */
-
-
-.map-container { width: 100%; height: 450px; background-color: #E5E7EB; position: relative; }
-/* Leaflet Map Styling */
-.leaflet-container { width: 100%; height: 100%; }
-.leaflet-popup-content-wrapper { border-radius: 8px; }
-.leaflet-popup-content { font-family: 'Inter', sans-serif; font-weight: 600; }
-.carouselContainer { background-color: #FFFFFF; padding: 20px 0; border-top: 1px solid #F3F4F6; }
-.carouselTitle { font-size: 20px; font-weight: 700; color: #111827; margin-left: 20px; margin-bottom: 15px; }
-.carousel { display: flex; overflow-x: auto; padding-left: 20px; padding-right: 20px; scrollbar-width: none; scroll-behavior: smooth; }
 .carousel::-webkit-scrollbar { display: none; }
-.carouselCard { width: 270px; height: 150px; margin-right: 15px; border-radius: 16px; overflow: hidden; position: relative; flex-shrink: 0; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; }
+
+.carouselCard {
+  width: 270px;
+  height: 150px;
+  margin-right: 15px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
 .carouselCard:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
 .cardImage { width: 100%; height: 100%; object-fit: cover; }
-.cardOverlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%); display: flex; flex-direction: column; justify-content: flex-end; padding: 12px; }
-.cardTitle { color: #FFFFFF; font-size: 16px; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
-.cardFooter { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
-.cardUpvotes { color: #FFFFFF; font-size: 12px; font-weight: 500; }
-.upvoteButton { background-color: rgba(79, 70, 229, 0.8); padding: 5px 10px; border-radius: 15px; border: none; cursor: pointer; backdrop-filter: blur(5px); }
-.upvoteButtonText { color: #FFFFFF; font-weight: 700; font-size: 12px; }
-.navBar { position: absolute; bottom: 0; width: 100%; display: flex; height: 75px; background-color: #FFFFFF; border-top: 1px solid #E5E7EB; justify-content: space-around; align-items: center; box-shadow: 0 -2px 5px rgba(0,0,0,0.02); }
-.navItem { display: flex; flex-direction: column; align-items: center; cursor: pointer; padding: 10px; }
-.navLabel { font-size: 12px; color: #6B7280; margin-top: 4px; font-weight: 500; }
-.navLabelActive { color: #4F46E5; }
-.fab { position: absolute; width: 60px; height: 60px; border-radius: 30px; background: linear-gradient(45deg, #4F46E5, #818CF8); justify-content: center; align-items: center; bottom: 95px; right: 20px; box-shadow: 0 6px 12px rgba(79, 70, 229, 0.4); cursor: pointer; display: flex; z-index: 1001; transition: transform 0.2s; }
-.fab:hover { transform: scale(1.1); }
-/* Modal styles */
-.modalBackdrop { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: flex-end; z-index: 1002; }
-.modalView { background-color: white; border-radius: 24px 24px 0 0; padding: 25px; align-items: center; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); width: 100%; box-sizing: border-box; animation: slideUp 0.3s ease-out; }
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-.modalImage { width: 100%; height: 180px; border-radius: 16px; margin-bottom: 20px; object-fit: cover; }
-.modalTitle { font-size: 24px; font-weight: 800; margin-bottom: 8px; text-align: center; color: #111827; }
-.modalCategory { font-size: 14px; color: #6B7280; margin-bottom: 20px; background-color: #F3F4F6; padding: 4px 10px; border-radius: 12px; }
-.modalStatusContainer { display: flex; justify-content: space-between; width: 100%; margin-bottom: 20px; padding: 0 10px; align-items: center; box-sizing: border-box; }
-.modalStatus { padding: 6px 12px; border-radius: 15px; color: #fff; font-weight: 700; font-size: 12px; }
-.statusActive { background-color: #3B82F6; }
-.statusInProgress { background-color: #F59E0B; }
-.statusPending { background-color: #6B7280; }
-.statusResolved { background-color: #10B981; }
-.modalUpvotes { font-size: 16px; font-weight: 600; color: #111827; }
-.modalInfo { font-size: 15px; text-align: center; color: #4B5563; margin-bottom: 25px; line-height: 1.5; }
-.modalButton { background: linear-gradient(45deg, #4F46E5, #6A63DD); padding: 16px; border-radius: 16px; width: 100%; display: flex; justify-content: center; align-items: center; margin-bottom: 12px; border: none; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2); }
-.modalButton:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(79, 70, 229, 0.3); }
-.modalButtonText { color: #fff; font-weight: 700; font-size: 16px; }
-.modalCloseButton { padding: 10px; background: none; border: none; cursor: pointer; }
-.modalCloseButtonText { color: #6B7280; font-size: 14px; font-weight: 500; }
-.geminiButton { background: #fff; border: 1px solid #4F46E5; box-shadow: none; }
-.geminiButton:hover { background-color: #F9FAFB; }
-.geminiButtonText { color: #4F46E5; }
-.spinner { width: 20px; height: 20px; border: 3px solid #fff; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; margin-left: 10px; }
-.geminiSpinner { border-color: #4F46E5; border-top-color: transparent; }
-@keyframes spin { to { transform: rotate(360deg); } }
-/* My Issues Screen */
-.filterContainer { display: flex; justify-content: space-around; padding: 15px 10px; background-color: #FFFFFF; }
-.filterButton { padding: 8px 16px; border-radius: 20px; background-color: #F3F4F6; border: none; cursor: pointer; transition: background-color 0.2s; }
-.filterButton:hover { background-color: #E5E7EB; }
-.filterButtonActive { background-color: #4F46E5; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2); }
-.filterButtonText { color: #374151; font-weight: 600; }
-.filterButtonTextActive { color: #FFFFFF; }
-.listScrollView { flex: 1; padding: 0 15px; overflow-y: auto; max-height: calc(844px - 220px); /* Adjust based on header/filter height */ }
-.issueListItem { background-color: #FFFFFF; border-radius: 16px; padding: 12px; display: flex; margin-bottom: 12px; margin-top: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-.issueListImage { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; }
-.issueListInfo { flex: 1; margin-left: 15px; display: flex; flex-direction: column; justify-content: space-between; }
-.issueListTitle { font-size: 16px; font-weight: 700; color: #111827; }
-.issueListCategory { font-size: 12px; color: #6B7280; }
-.issueListFooter { display: flex; justify-content: space-between; align-items: center; }
-.issueListUpvotes { font-size: 12px; color: #4B5563; font-weight: 500; }
-/* Leaderboard Screen */
-.leaderboardSectionTitle { font-size: 22px; font-weight: 800; color: #111827; margin-top: 20px; margin-bottom: 15px; padding: 0 5px; }
-.leaderboardCard { background-color: #FFFFFF; border-radius: 16px; padding: 15px; display: flex; align-items: center; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-.leaderboardRank { font-size: 20px; font-weight: 800; color: #6B7280; width: 40px; }
-.leaderboardInfo { flex: 1; }
-.leaderboardName { font-size: 16px; font-weight: 600; }
-.leaderboardResolved { font-size: 12px; color: #6B7280; }
-.leaderboardScore { font-size: 22px; font-weight: 800; color: #F59E0B; }
-/* Profile Screen */
-.profileContent { flex: 1; align-items: center; padding: 20px; text-align: center; }
-.profileAvatar { width: 120px; height: 120px; border-radius: 60px; background-color: #4F46E5; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3); }
-.profileAvatarText { color: #FFFFFF; font-size: 50px; font-weight: 700; }
-.profileName { font-size: 28px; font-weight: 800; }
-.profileEmail { font-size: 16px; color: #6B7280; margin-bottom: 40px; }
-.profileButton { width: 100%; padding: 16px; border: 1px solid #D1D5DB; border-radius: 16px; text-align: center; margin-bottom: 12px; background: #fff; cursor: pointer; transition: all 0.2s; }
-.profileButton:hover { border-color: #4F46E5; color: #4F46E5; }
-.profileButtonText { font-size: 16px; font-weight: 600; color: #111827; }
+.cardOverlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
+  display: flex; flex-direction: column; justify-content: flex-end; padding: 12px;
+}
+.cardTitle { color: #fff; font-size: 16px; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+.cardFooter { display:flex; justify-content:space-between; align-items:center; margin-top:5px; }
+.cardUpvotes { color: #fff; font-size: 12px; font-weight: 500; }
+
+/* Bottom nav (pinned inside phone) */
+.navBar {
+  display: flex;
+  height: var(--nav-height);
+  background-color: #FFFFFF;
+  border-top: 1px solid #E5E7EB;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.02);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+}
+.navItem { display:flex; flex-direction:column; align-items:center; cursor:pointer; padding:10px; }
+.navLabel { font-size:12px; color:#6B7280; margin-top:4px; font-weight:500; }
+.navLabelActive { color: var(--primary); }
+
+/* FAB (floats above nav) */
+.fab {
+  position: absolute;
+  width: 60px; height: 60px; border-radius: 50%;
+  background: linear-gradient(45deg, #4F46E5, #818CF8);
+  display:flex; justify-content:center; align-items:center;
+  right: 20px;
+  bottom: calc(var(--nav-height) + var(--fab-gap));
+  box-shadow: 0 6px 12px rgba(79,70,229,0.4);
+  z-index: 30;
+  cursor: pointer;
+  transition: transform .18s;
+}
+.fab:hover { transform: scale(1.06); }
+
+/* Modal */
+.modalBackdrop {
+  position: absolute; inset: 0;
+  background-color: rgba(0,0,0,0.6);
+  display:flex; justify-content:center; align-items:flex-end; z-index:1000;
+}
+.modalView {
+  width: 100%;
+  background: #fff;
+  border-radius: 24px 24px 0 0;
+  padding: 25px;
+  box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+  animation: slideUp .28s ease-out;
+}
+@keyframes slideUp { from { transform: translateY(100%);} to { transform: translateY(0);} }
+.modalImage { width:100%; height:180px; border-radius:16px; margin-bottom:20px; object-fit:cover; }
+.modalTitle { font-size:24px; font-weight:800; color:#111827; text-align:center; margin-bottom:8px; }
+.modalCategory { font-size:14px; color:#6B7280; background:#F3F4F6; padding:4px 10px; border-radius:12px; margin-bottom:20px; display:inline-block; }
+.modalStatusContainer { display:flex; justify-content:space-between; width:100%; margin-bottom:20px; padding:0 10px; align-items:center; }
+.modalStatus { padding:6px 12px; border-radius:15px; color:#fff; font-weight:700; font-size:12px; }
+.statusActive{ background:#3B82F6; } .statusInProgress{ background:#F59E0B; } .statusPending{ background:#6B7280; } .statusResolved{ background:#10B981; }
+.modalUpvotes{ font-size:16px; font-weight:600; color:#111827; }
+.modalInfo{ font-size:15px; text-align:center; color:#4B5563; margin-bottom:25px; line-height:1.5; }
+.modalButton {
+  background: linear-gradient(45deg,#4F46E5,#6A63DD);
+  padding:16px; border-radius:16px; width:100%; border:none; cursor:pointer;
+  display:flex; justify-content:center; align-items:center; margin-bottom:12px;
+  box-shadow: 0 4px 10px rgba(79,70,229,0.2); transition: transform .18s, box-shadow .18s;
+}
+.modalButton:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(79,70,229,0.28); }
+.modalButtonText { color:#fff; font-weight:700; font-size:16px; }
+.modalCloseButton{ background:none; border:none; cursor:pointer; padding:10px; }
+.modalCloseButtonText{ color:#6B7280; font-size:14px; font-weight:500; }
+
+/* Small utilities used around */
+.spinner{ width:20px; height:20px; border:3px solid #fff; border-top-color:transparent; border-radius:50%; animation:spin 1s linear infinite; margin-left:10px; }
+.geminiSpinner{ border-color:var(--primary); border-top-color:transparent; }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+/* My Issues */
+.filterContainer{ display:flex; justify-content:space-around; padding:15px 10px; background:#fff; }
+.filterButton{ padding:8px 16px; border-radius:20px; background:#F3F4F6; border:none; cursor:pointer; }
+.filterButton:hover{ background:#E5E7EB; }
+.filterButtonActive{ background:var(--primary); box-shadow: 0 4px 10px rgba(79,70,229,0.2); }
+.filterButtonText{ color:#374151; font-weight:600; }
+.filterButtonTextActive{ color:#fff; }
+
+.listScrollView{ flex:1; padding:0 15px; overflow-y:auto; }
+
+/* Issue list */
+.issueListItem{ background:#fff; border-radius:16px; padding:12px; display:flex; margin:12px 0; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
+.issueListImage{ width:80px; height:80px; border-radius:12px; object-fit:cover; }
+.issueListInfo{ flex:1; margin-left:15px; display:flex; flex-direction:column; justify-content:space-between; }
+.issueListTitle{ font-size:16px; font-weight:700; color:#111827; }
+.issueListCategory{ font-size:12px; color:#6B7280; }
+.issueListFooter{ display:flex; justify-content:space-between; align-items:center; }
+.issueListUpvotes{ font-size:12px; color:#4B5563; font-weight:500; }
+
+/* Leaderboard */
+.leaderboardSectionTitle{ font-size:22px; font-weight:800; color:#111827; margin:20px 0 15px; padding:0 5px; }
+.leaderboardCard{ background:#fff; border-radius:16px; padding:15px; display:flex; align-items:center; margin-bottom:12px; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
+.leaderboardRank{ font-size:20px; font-weight:800; color:#6B7280; width:40px; }
+.leaderboardInfo{ flex:1; } .leaderboardName{ font-size:16px; font-weight:600; }
+.leaderboardResolved{ font-size:12px; color:#6B7280; } .leaderboardScore{ font-size:22px; font-weight:800; color:#F59E0B; }
+
+/* Profile */
+.profileContent{ flex:1; padding:20px; text-align:center; }
+.profileAvatar{ width:120px; height:120px; border-radius:60px; background:var(--primary); display:flex; justify-content:center; align-items:center; margin:0 auto 15px; box-shadow:0 4px 15px rgba(79,70,229,0.3); }
+.profileAvatarText{ color:#fff; font-size:50px; font-weight:700; }
+.profileName{ font-size:28px; font-weight:800; } .profileEmail{ font-size:16px; color:#6B7280; margin-bottom:40px; }
+.profileButton{ width:100%; padding:16px; border:1px solid #D1D5DB; border-radius:16px; background:#fff; cursor:pointer; margin-bottom:12px; transition:all .18s; }
+.profileButton:hover{ border-color:var(--primary); color:var(--primary); }
+.profileButtonText{ font-size:16px; font-weight:600; color:#111827; }
+
 /* Add Issue Modal */
-.addIssueModal { background-color: white; padding: 25px; border-top-left-radius: 24px; border-top-right-radius: 24px; height: 90%; box-sizing: border-box; display: flex; flex-direction: column; animation: slideUp 0.3s ease-out; }
-.addIssueTitle { font-size: 24px; font-weight: 800; margin-bottom: 25px; text-align: center; color: #111827;}
-.addIssueLabel { font-size: 14px; color: #374151; font-weight: 600; margin-bottom: 8px; }
-.addIssueImagePicker { height: 120px; width: 100%; background-color: #F9FAFB; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; border: 2px dashed #D1D5DB; cursor: pointer; transition: background-color 0.2s; }
-.addIssueImagePicker:hover { background-color: #F3F4F6; }
-.addIssueImagePickerText { color: #6B7280; }
-.addIssueLocation { background-color: #F3F4F6; padding: 15px; border-radius: 12px; margin-bottom: 5px; }
-.addIssueLocationText { font-size: 16px; color: #111827; }
-.responseTimeText { font-size: 13px; color: #4F46E5; margin: 5px 0 15px 0; text-align: center; font-weight: 500;}
-.addIssueInput { background-color: #F9FAFB; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #D1D5DB; width: 100%; box-sizing: border-box; font-family: 'Inter', sans-serif; font-size: 16px; }
-.addIssueInput:focus { border-color: #4F46E5; box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2); outline: none; }
-.addIssueSubmitButton { background-color: #4F46E5; }
-.addIssueCloseButton { padding: 15px; display: flex; justify-content: center; align-items: center; background: none; border: none; cursor: pointer; }
-.addIssueCloseButtonText { color: #6B7280; font-size: 14px; font-weight: 500; }
-/* Draft Modal */
-.draftModalText { width: 100%; height: 300px; background-color: #F9FAFB; border-radius: 12px; padding: 15px; font-family: monospace; font-size: 13px; line-height: 1.6; border: 1px solid #E5E7EB; box-sizing: border-box; resize: none; margin-bottom: 15px; }
-/* Splash Screen */
-.splash-screen { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #FFFFFF; animation: fadeOut 0.5s ease-in 2.5s forwards; }
-@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; visibility: hidden; } }
-.splash-logo { max-width: 250px; }
+.addIssueModal{ background:#fff; padding:25px; border-top-left-radius:24px; border-top-right-radius:24px; height:90%; box-sizing:border-box; display:flex; flex-direction:column; animation:slideUp .28s; }
+.addIssueTitle{ font-size:24px; font-weight:800; text-align:center; margin-bottom:25px; color:#111827; }
+.addIssueLabel{ font-size:14px; color:#374151; font-weight:600; margin-bottom:8px; }
+.addIssueImagePicker{ height:120px; width:100%; background:#F9FAFB; border-radius:12px; display:flex; justify-content:center; align-items:center; margin-bottom:15px; border:2px dashed #D1D5DB; cursor:pointer; }
+.addIssueImagePicker:hover{ background:#F3F4F6; }
+.addIssueImagePickerText{ color:#6B7280; }
+.addIssueLocation{ background:#F3F4F6; padding:15px; border-radius:12px; margin-bottom:5px; }
+.addIssueLocationText{ font-size:16px; color:#111827; }
+.responseTimeText{ font-size:13px; color:var(--primary); margin:5px 0 15px; text-align:center; font-weight:500; }
+.addIssueInput{ background:#F9FAFB; padding:15px; border-radius:12px; margin-bottom:15px; border:1px solid #D1D5DB; width:100%; font-size:16px; }
+.addIssueInput:focus{ border-color:var(--primary); box-shadow:0 0 0 2px rgba(79,70,229,0.12); outline:none; }
+.addIssueSubmitButton{ background:var(--primary); color:#fff; padding:12px; border-radius:12px; border:none; cursor:pointer; }
+.addIssueCloseButton{ background:none; border:none; cursor:pointer; padding:15px; text-align:center; }
+.addIssueCloseButtonText{ color:#6B7280; font-size:14px; font-weight:500; }
+
+/* Draft textarea */
+.draftModalText{ width:100%; height:300px; background:#F9FAFB; border-radius:12px; padding:15px; font-family:monospace; font-size:13px; line-height:1.6; border:1px solid #E5E7EB; resize:none; margin-bottom:15px; }
+
+/* Splash */
+.splash-screen{ width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#fff; animation: fadeOut .5s ease-in 2.5s forwards; }
+@keyframes fadeOut{ from{opacity:1} to{opacity:0; visibility:hidden} }
+.splash-logo{ max-width:600px; }
