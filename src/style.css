@@ -12,35 +12,23 @@ body {
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #111827;
+  background-color: #FFFFFF;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  overflow: hidden;
 }
 
 #root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100vw;
+  height: 100vh;
 }
 
-/* Phone frame */
 .phone-container {
-  width: 390px;
-  height: 844px;
+  width: 100%;
+  height: 100%;
   background-color: #ffffff;
-  border-radius: 40px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
   position: relative;
-  border: 8px solid #111;
   display: flex;
-  flex-direction: column; /* stack header -> content -> nav */
+  flex-direction: column;
   overflow: hidden;
 }
 
@@ -50,9 +38,9 @@ body {
   display: flex;
   flex-direction: column;
   background-color: #F9FAFB;
-  overflow-y: auto;            /* main scrolling surface */
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding-bottom: calc(var(--nav-height) + 40px); /* avoid nav overlap */
+  padding-bottom: var(--nav-height);
 }
 
 .container {
@@ -67,6 +55,7 @@ body {
   background-color: #FFFFFF;
   box-shadow: 0 1px 2px rgba(0,0,0,0.02);
   z-index: 10;
+  flex-shrink: 0;
 }
 
 .header { padding: 20px; }
@@ -82,17 +71,22 @@ body {
 .headerLogoTitle { font-size: 22px; font-weight: 800; color: #111827; }
 .headerIcon { cursor: pointer; padding: 5px; }
 
-/* Map */
+/* --- FIX: Restored fixed height for map --- */
 .map-container {
   width: 100%;
-  height: 350px; /* kept fixed like original */
+  height: 300px; /* Leaflet needs a defined height to render */
   background-color: #E5E7EB;
   position: relative;
   z-index: 1;
+  flex-shrink: 0;
 }
 
 /* Carousel */
-.carouselContainer { background-color: #FFFFFF; padding: 20px 0; }
+.carouselContainer { 
+  background-color: #FFFFFF; 
+  padding: 20px 0; 
+  flex-shrink: 0;
+}
 .carouselTitle {
   font-size: 20px;
   font-weight: 700;
@@ -103,8 +97,7 @@ body {
 .carousel {
   display: flex;
   overflow-x: auto;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 20px 20px 0;
   scrollbar-width: none;
   scroll-behavior: smooth;
 }
@@ -169,17 +162,23 @@ body {
 
 /* Modal */
 .modalBackdrop {
-  position: absolute; inset: 0;
+  position: fixed;
+  inset: 0;
   background-color: rgba(0,0,0,0.6);
   display:flex; justify-content:center; align-items:flex-end; z-index:1000;
 }
 .modalView {
   width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
   background: #fff;
   border-radius: 24px 24px 0 0;
   padding: 25px;
   box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
   animation: slideUp .28s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 @keyframes slideUp { from { transform: translateY(100%);} to { transform: translateY(0);} }
 .modalImage { width:100%; height:180px; border-radius:16px; margin-bottom:20px; object-fit:cover; }
@@ -201,29 +200,86 @@ body {
 .modalCloseButton{ background:none; border:none; cursor:pointer; padding:10px; }
 .modalCloseButtonText{ color:#6B7280; font-size:14px; font-weight:500; }
 
-/* Small utilities used around */
 .spinner{ width:20px; height:20px; border:3px solid #fff; border-top-color:transparent; border-radius:50%; animation:spin 1s linear infinite; margin-left:10px; }
 .geminiSpinner{ border-color:var(--primary); border-top-color:transparent; }
 @keyframes spin{ to{ transform:rotate(360deg); } }
 
-/* My Issues */
-.filterContainer{ display:flex; justify-content:space-around; padding:15px 10px; background:#fff; }
-.filterButton{ padding:8px 16px; border-radius:20px; background:#F3F4F6; border:none; cursor:pointer; }
+/* My Issues Screen Styles */
+.filterContainer{ display:flex; padding:15px 20px; background:#fff; overflow-x: auto;}
+.filterButton{ padding:8px 16px; border-radius:20px; background:#F3F4F6; border:none; cursor:pointer; flex-shrink: 0; margin-right: 10px; }
 .filterButton:hover{ background:#E5E7EB; }
 .filterButtonActive{ background:var(--primary); box-shadow: 0 4px 10px rgba(79,70,229,0.2); }
 .filterButtonText{ color:#374151; font-weight:600; }
 .filterButtonTextActive{ color:#fff; }
 
-.listScrollView{ flex:1; padding:0 15px; overflow-y:auto; }
+.listScrollView{ flex:1; padding:0 20px; }
 
-/* Issue list */
-.issueListItem{ background:#fff; border-radius:16px; padding:12px; display:flex; margin:12px 0; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
-.issueListImage{ width:80px; height:80px; border-radius:12px; object-fit:cover; }
-.issueListInfo{ flex:1; margin-left:15px; display:flex; flex-direction:column; justify-content:space-between; }
-.issueListTitle{ font-size:16px; font-weight:700; color:#111827; }
-.issueListCategory{ font-size:12px; color:#6B7280; }
-.issueListFooter{ display:flex; justify-content:space-between; align-items:center; }
-.issueListUpvotes{ font-size:12px; color:#4B5563; font-weight:500; }
+.issueListItemV2 {
+    background: #fff;
+    border-radius: 18px;
+    padding: 15px;
+    display: flex;
+    align-items: flex-start;
+    margin: 15px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.issueListItemV2:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+.issueListImageV2 {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+.issueListInfoV2 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+    min-height: 80px; /* Match image height */
+}
+.issueListTitleV2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+    line-height: 1.4;
+    word-break: break-word;
+}
+/* --- FIX: Added style for category --- */
+.issueListCategoryV2 {
+    font-size: 13px;
+    color: #6B7280;
+    margin: 4px 0 8px 0;
+}
+.issueListFooterV2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+.issueListFooterV2 span:nth-child(1) { /* Status */
+    color: #fff;
+    border-radius: 12px;
+    padding: 4px 10px;
+    font-weight: 600;
+}
+.issueListFooterV2 span:nth-child(2) { /* Upvotes */
+    color: #F59E0B;
+    font-weight: 600;
+}
+
+/* Old styles are not used, keeping this section blank is fine */
+.issueListItem, .issueListInfo, .issueListTitle, .issueListFooter, .issueListImage { }
+
+/* ... Rest of your CSS file remains the same ... */
 
 /* Leaderboard */
 .leaderboardSectionTitle{ font-size:22px; font-weight:800; color:#111827; margin:20px 0 15px; padding:0 5px; }
@@ -233,34 +289,32 @@ body {
 .leaderboardResolved{ font-size:12px; color:#6B7280; } .leaderboardScore{ font-size:22px; font-weight:800; color:#F59E0B; }
 
 /* Profile */
-.profileContent{ flex:1; padding:20px; text-align:center; }
+.profileContent{ flex:1; padding:20px; text-align:center; display: flex; flex-direction: column; justify-content: center; align-items: center;}
 .profileAvatar{ width:120px; height:120px; border-radius:60px; background:var(--primary); display:flex; justify-content:center; align-items:center; margin:0 auto 15px; box-shadow:0 4px 15px rgba(79,70,229,0.3); }
 .profileAvatarText{ color:#fff; font-size:50px; font-weight:700; }
 .profileName{ font-size:28px; font-weight:800; } .profileEmail{ font-size:16px; color:#6B7280; margin-bottom:40px; }
-.profileButton{ width:100%; padding:16px; border:1px solid #D1D5DB; border-radius:16px; background:#fff; cursor:pointer; margin-bottom:12px; transition:all .18s; }
+.profileButton{ width:100%; max-width: 300px; padding:16px; border:1px solid #D1D5DB; border-radius:16px; background:#fff; cursor:pointer; margin-bottom:12px; transition:all .18s; }
 .profileButton:hover{ border-color:var(--primary); color:var(--primary); }
 .profileButtonText{ font-size:16px; font-weight:600; color:#111827; }
 
 /* Add Issue Modal */
-.addIssueModal{ background:#fff; padding:25px; border-top-left-radius:24px; border-top-right-radius:24px; height:90%; box-sizing:border-box; display:flex; flex-direction:column; animation:slideUp .28s; }
+.addIssueModal{ max-height: 95vh; overflow-y: auto; align-items: center; padding: 25px; }
 .addIssueTitle{ font-size:24px; font-weight:800; text-align:center; margin-bottom:25px; color:#111827; }
-.addIssueLabel{ font-size:14px; color:#374151; font-weight:600; margin-bottom:8px; }
+.addIssueLabel{ font-size:14px; color:#374151; font-weight:600; margin-bottom:8px; width: 100%; text-align: left;}
 .addIssueImagePicker{ height:120px; width:100%; background:#F9FAFB; border-radius:12px; display:flex; justify-content:center; align-items:center; margin-bottom:15px; border:2px dashed #D1D5DB; cursor:pointer; }
 .addIssueImagePicker:hover{ background:#F3F4F6; }
 .addIssueImagePickerText{ color:#6B7280; }
-.addIssueLocation{ background:#F3F4F6; padding:15px; border-radius:12px; margin-bottom:5px; }
+.addIssueLocation{ background:#F3F4F6; padding:15px; border-radius:12px; margin-bottom:5px; width: 100%; text-align: left;}
 .addIssueLocationText{ font-size:16px; color:#111827; }
 .responseTimeText{ font-size:13px; color:var(--primary); margin:5px 0 15px; text-align:center; font-weight:500; }
-.addIssueInput{ background:#F9FAFB; padding:15px; border-radius:12px; margin-bottom:15px; border:1px solid #D1D5DB; width:100%; font-size:16px; }
+.addIssueInput{ background:#F9FAFB; padding:15px; border-radius:12px; margin-bottom:15px; border:1px solid #D1D5DB; width:100%; font-size:16px; font-family: 'Inter', sans-serif; }
 .addIssueInput:focus{ border-color:var(--primary); box-shadow:0 0 0 2px rgba(79,70,229,0.12); outline:none; }
 .addIssueSubmitButton{ background:var(--primary); color:#fff; padding:12px; border-radius:12px; border:none; cursor:pointer; }
 .addIssueCloseButton{ background:none; border:none; cursor:pointer; padding:15px; text-align:center; }
 .addIssueCloseButtonText{ color:#6B7280; font-size:14px; font-weight:500; }
 
-/* Draft textarea */
 .draftModalText{ width:100%; height:300px; background:#F9FAFB; border-radius:12px; padding:15px; font-family:monospace; font-size:13px; line-height:1.6; border:1px solid #E5E7EB; resize:none; margin-bottom:15px; }
 
-/* Splash */
 .splash-screen{ width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#fff; animation: fadeOut .5s ease-in 2.5s forwards; }
 @keyframes fadeOut{ from{opacity:1} to{opacity:0; visibility:hidden} }
-.splash-logo{ max-width:600px; }
+.splash-logo{ max-width:250px; }
