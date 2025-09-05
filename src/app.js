@@ -5,7 +5,6 @@ import './style.css';
 const UserLogo = () => {
     return <img src="/logo.png" alt="CivicConnect Logo" className="splash-logo" />;
 };
-// ADDED SearchIcon for the new header
 const SearchIcon = () => ( <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="#111827" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M21 21L16.65 16.65" stroke="#111827" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> );
 const HomeIcon = ({ active }) => ( <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke={active ? '#4F46E5' : '#6B7280'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M9 22V12h6v10" stroke={active ? '#4F46E5' : '#6B7280'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg> );
 const IssuesIcon = ({ active }) => ( <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke={active ? '#4F46E5' : '#6B7280'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg> );
@@ -14,32 +13,69 @@ const ProfileIcon = ({ active }) => ( <svg width="24" height="24" viewBox="0 0 2
 const PlusIcon = () => ( <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg> );
 
 // --- MOCK DATA (used for first time load) ---
+// FRIEND'S CHANGES: Added 'date' property and more issues
 const initialIssues = [
-    { id: 1, title: "Severe Pothole on Tonk Road", category: "Roads", lat: 26.8500, lon: 75.8000, status: "Active", upvotes: 12, reporter: 'user1', image: "https://images.pexels.com/photos/19131580/pexels-photo-19131580/free-photo-of-a-man-riding-a-scooter-on-a-dirt-road.jpeg?auto=compress&cs=tinysrgb&w=600" },
-    { id: 2, title: "Flickering Streetlight in Malviya Nagar", category: "Utilities", lat: 26.8525, lon: 75.8050, status: "In Progress", upvotes: 5, reporter: 'user2', image: 'https://images.pexels.com/photos/1519753/pexels-photo-1519753.jpeg?auto=compress&cs=tinysrgb&w=600' },
-    { id: 3, title: "Garbage Dump near Market", category: "Waste", lat: 26.8480, lon: 75.8020, status: "Resolved", upvotes: 25, reporter: 'user3', image: 'https://images.pexels.com/photos/1109349/pexels-photo-1109349.jpeg?auto=compress&cs=tinysrgb&w=600' },
+    { id: 1, title: "Severe Pothole on Tonk Road", category: "Roads", lat: 26.8500, lon: 75.8000, status: "Active", upvotes: 12, reporter: 'user1', image: 'https://images.pexels.com/photos/19131580/pexels-photo-19131580/free-photo-of-a-man-riding-a-scooter-on-a-dirt-road.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-01' },
+    { id: 2, title: "Flickering Streetlight in Malviya Nagar", category: "Utilities", lat: 26.8525, lon: 75.8050, status: "In Progress", upvotes: 5, reporter: 'user2', image: 'https://images.pexels.com/photos/1519753/pexels-photo-1519753.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-02' },
+    { id: 3, title: "Garbage Dump near Market", category: "Waste", lat: 26.8480, lon: 75.8020, status: "Resolved", upvotes: 25, reporter: 'user3', image: 'https://images.pexels.com/photos/1109349/pexels-photo-1109349.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-07-28' },
+    { id: 4, title: "Auto Rickshaw Blocking Lane", category: "Traffic", lat: 26.8510, lon: 75.7990, status: "Active", upvotes: 8, reporter: 'user1', image: 'https://images.pexels.com/photos/16301321/pexels-photo-16301321/free-photo-of-auto-rickshaw-on-a-street-in-india.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-03' },
+    { id: 5, title: "Leaking Water Pipe on Sidewalk", category: "Utilities", lat: 26.8550, lon: 75.8100, status: "Pending", upvotes: 3, reporter: 'user4', image: 'https://images.pexels.com/photos/2059045/pexels-photo-2059045.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-04' },
+    { id: 6, title: "Broken Traffic Signal at Gopalpura", category: "Traffic", lat: 26.8600, lon: 75.8100, status: "In Progress", upvotes: 7, reporter: 'user1', image: 'https://images.pexels.com/photos/356830/pexels-photo-356830.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-05' },
+    { id: 7, title: "Overflowing Drain in Vaishali Nagar", category: "Waste", lat: 26.8620, lon: 75.8120, status: "Pending", upvotes: 4, reporter: 'user1', image: 'https://images.pexels.com/photos/533451/pexels-photo-533451.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-06' },
+    { id: 8, title: "Street Flooding after Rain", category: "Roads", lat: 26.8640, lon: 75.8140, status: "Resolved", upvotes: 15, reporter: 'user1', image: 'https://images.pexels.com/photos/110874/pexels-photo-110874.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-07-30' },
+    { id: 9, title: "Damaged Park Bench", category: "Utilities", lat: 26.8660, lon: 75.8160, status: "In Progress", upvotes: 2, reporter: 'user1', image: 'https://images.pexels.com/photos/164634/pexels-photo-164634.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-07' },
+    { id: 10, title: "Illegal Dumping in Open Plot", category: "Waste", lat: 26.8680, lon: 75.8180, status: "Resolved", upvotes: 10, reporter: 'user1', image: 'https://images.pexels.com/photos/208349/pexels-photo-208349.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-07-25' }
 ];
 const ngos = [ { id: 1, name: 'Clean Jaipur Foundation', score: 4.8, resolved: 124 }, { id: 2, name: 'Green Rajasthan Initiative', score: 4.6, resolved: 98 }, { id: 3, name: 'Urban Development Trust', score: 4.2, resolved: 75 } ];
 const municipalities = [ { id: 1, name: 'Jaipur Municipal Corp.', score: 3.9, resolved: 567 }, { id: 2, name: 'Sanganer Tehsil', score: 3.5, resolved: 342 }, { id: 3, name: 'Amer Tehsil', score: 3.2, resolved: 210 } ];
 
-// --- LOCAL STORAGE SERVICE ---
+// --- LOCAL STORAGE SERVICE (CORRECTED) ---
 const STORAGE_KEY = 'civicConnectData';
+const DATA_VERSION = 1; // Increment this when you want to force refresh of initial data
+
 const storageService = {
     getData: () => {
         try {
             const data = localStorage.getItem(STORAGE_KEY);
-            if (data) return JSON.parse(data);
-            const defaultData = { issues: initialIssues, leaderboard: { ngos, municipalities } };
+            const parsedData = data ? JSON.parse(data) : null;
+            
+            // Always use the latest initialIssues from code, but preserve user additions and upvote changes
+            const defaultData = { 
+                issues: [...initialIssues], 
+                leaderboard: { ngos, municipalities },
+                version: DATA_VERSION
+            };
+            
+            if (parsedData && parsedData.version === DATA_VERSION) {
+                // Keep user modifications (upvotes) and user-added issues
+                const userAddedIssues = parsedData.issues.filter(issue => 
+                    !initialIssues.find(initial => initial.id === issue.id)
+                );
+                
+                // Update initial issues with any upvote changes
+                const updatedInitialIssues = initialIssues.map(initial => {
+                    const existing = parsedData.issues.find(issue => issue.id === initial.id);
+                    return existing ? { ...initial, upvotes: existing.upvotes } : initial;
+                });
+                
+                defaultData.issues = [...updatedInitialIssues, ...userAddedIssues];
+            }
+            
             localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
             return defaultData;
         } catch (error) {
             console.error("Error accessing localStorage:", error);
-            return { issues: initialIssues, leaderboard: { ngos, municipalities } };
+            return { 
+                issues: initialIssues, 
+                leaderboard: { ngos, municipalities },
+                version: DATA_VERSION
+            };
         }
     },
     saveData: (data) => {
         try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            const dataWithVersion = { ...data, version: DATA_VERSION };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(dataWithVersion));
         } catch (error) {
             console.error("Error saving to localStorage:", error);
         }
@@ -55,7 +91,7 @@ const mockApiService = {
     getAverageResponseTime: async (pincode) => new Promise(resolve => setTimeout(() => resolve({ days: Math.floor(Math.random() * 5) + 2 }), 1000))
 };
 
-// --- MAP COMPONENT (This is the working version from your friend) ---
+// --- MAP COMPONENT ---
 const MapComponent = ({ issues }) => {
     const mapContainerRef = useRef(null);
     const mapInstanceRef = useRef(null);
@@ -81,7 +117,6 @@ const MapComponent = ({ issues }) => {
 };
 
 // --- SCREENS & COMPONENTS ---
-// MODIFIED: This is the HomeScreen with YOUR desired header
 const HomeScreen = ({ issues, handleUpvote, setActiveScreen }) => {
     const [selectedIssue, setSelectedIssue] = useState(null);
     const IssueCard = ({ issue, onClick }) => (
@@ -220,33 +255,150 @@ const AppContent = () => {
     };
 
     const handleAddIssue = (newIssue) => {
-        const newIssueWithId = { ...newIssue, id: Date.now(), upvotes: 0, status: 'Pending', reporter: 'user1' };
-        const updatedIssues = [...appData.issues, newIssueWithId];
+        const newIssueWithId = { ...newIssue, id: Date.now(), upvotes: 0, status: 'Pending', reporter: 'user1', date: new Date().toISOString().slice(0,10) };
+        const updatedIssues = [newIssueWithId, ...appData.issues];
         handleDataUpdate({ ...appData, issues: updatedIssues });
         setShowAddIssueModal(false);
     };
 
-    const MyIssuesScreen = ({ allIssues }) => { 
-        const [filter, setFilter] = useState('Active'); 
-        const userIssues = allIssues?.filter(i => i.reporter === 'user1');
-        const filteredIssues = userIssues?.filter(issue => filter === 'All' || issue.status === filter);
-        const filters = ['Active', 'In Progress', 'Pending', 'Resolved']; 
-        const IssueListItem = ({item}) => ( <div className="issueListItem"> <img src={item.image} className="issueListImage" alt={item.title}/> <div className="issueListInfo"> <div> <p className="issueListTitle">{item.title}</p> <p className="issueListCategory">{item.category}</p> </div> <div className="issueListFooter"> <span className={`modalStatus status${item.status.replace(/\s+/g, '')}`}>{item.status}</span> <span className="issueListUpvotes">{item.upvotes} upvotes</span> </div> </div> </div> );
-        return ( <div className="container"> <div className="header"><h1 className="headerTitle">My Reported Issues</h1></div> <div className="filterContainer"> {filters.map(f => <button key={f} className={`filterButton ${filter === f ? 'filterButtonActive' : ''}`} onClick={() => setFilter(f)}><span className={`filterButtonText ${filter === f ? 'filterButtonTextActive' : ''}`}>{f}</span></button>)} </div> <div className="listScrollView">{filteredIssues?.map(item => <IssueListItem key={item.id} item={item} />)}</div> </div> ); 
+    // FRIEND'S CHANGES: These constants and new components are for the enhanced MyIssuesScreen
+    const CATEGORY_COLORS = { Roads: '#F59E42', Utilities: '#3B82F6', Waste: '#10B981', Traffic: '#F43F5E', default: '#A1A1AA' };
+    const STATUS_COLORS = { Active: '#EF4444', 'In Progress': '#F59E42', Pending: '#A78BFA', Resolved: '#10B981', default: '#A1A1AA' };
+
+    const Toast = ({ message, onClose }) => {
+        useEffect(() => {
+            const timer = setTimeout(onClose, 3000);
+            return () => clearTimeout(timer);
+        }, [onClose]);
+        return (
+            <div className="toast" role="alert" aria-live="assertive">
+                {message}
+                <button onClick={onClose} style={{marginLeft: 16, background: 'none', border: 'none', color: '#fff', fontWeight: 700, cursor: 'pointer', fontSize: 16}}>×</button>
+            </div>
+        );
     };
+
+    const MyIssueDetailModal = ({ issue, onClose, statusHistory, comments, authority, showToast }) => {
+        const modalRef = useRef();
+        useEffect(() => { if (modalRef.current) modalRef.current.focus(); }, []);
+        const handleCopyLink = () => { navigator.clipboard.writeText(window.location.href + `#issue-${issue.id}`); showToast('Issue link copied!'); };
+        const handleDownload = () => {
+            const text = `Issue: ${issue.title}\nStatus: ${issue.status}\n\nTimeline:\n${statusHistory.map(s => `${s.status} - ${s.date}`).join('\n')}`;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `issue-${issue.id}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Issue exported as text!');
+        };
+        return (
+            <div className="modalBackdrop" onClick={onClose} aria-modal="true" role="dialog">
+                <div className="modalView" ref={modalRef} onClick={e => e.stopPropagation()} style={{maxWidth: 420, outline: 'none'}} tabIndex={-1}>
+                    <img src={issue.image} className="modalImage" alt={issue.title} />
+                    <h2 className="modalTitle">{issue.title}</h2>
+                    <span style={{ background: CATEGORY_COLORS[issue.category] || CATEGORY_COLORS.default, color: '#fff', borderRadius: 8, padding: '2px 10px', fontSize: 12, marginBottom: 8, display: 'inline-block' }}>{issue.category}</span>
+                    <div style={{margin: '12px 0 8px 0', fontSize: 14, color: '#6366F1', fontWeight: 500}}>Assigned to: <span style={{color: '#4F46E5'}}>{authority.name}</span></div>
+                    <div style={{margin: '16px 0'}}>
+                        <div style={{fontWeight: 600, color: '#4F46E5', marginBottom: 4}}>Status Timeline</div>
+                        <ol style={{paddingLeft: 18, margin: 0, color: '#334155', fontSize: 13}}>
+                            {statusHistory.map((s, idx) => ( <li key={s.status} style={{marginBottom: 2, fontWeight: idx === statusHistory.length-1 ? 700 : 400}}>{s.status} <span style={{color: '#6B7280'}}>({s.date})</span></li> ))}
+                        </ol>
+                    </div>
+                    <div style={{margin: '16px 0'}}>
+                        <div style={{fontWeight: 600, color: '#4F46E5', marginBottom: 4}}>Comments & Updates</div>
+                        <div style={{maxHeight: 90, overflowY: 'auto', background: '#F3F4F6', borderRadius: 8, padding: 8, marginBottom: 6}}>
+                            {comments.map((c, i) => ( <div key={i} style={{marginBottom: 4}}><span style={{fontWeight: 500, color: c.user === 'You' ? '#4F46E5' : '#334155'}}>{c.user}:</span> {c.text}</div> ))}
+                        </div>
+                    </div>
+                    <div style={{display: 'flex', gap: 8, margin: '12px 0'}}>
+                        <button className="modalButton" style={{background: '#4F46E5', color: '#fff'}} onClick={handleCopyLink}>Copy Link</button>
+                        <button className="modalButton" style={{background: '#10B981', color: '#fff'}} onClick={handleDownload}>Export</button>
+                    </div>
+                    <button className="modalCloseButton" onClick={onClose}>Close</button>
+                </div>
+            </div>
+        );
+    };
+    
+    // CORRECTED MyIssuesScreen with proper CSS classes
+    const MyIssuesScreen = ({ allIssues }) => {
+        const [filter, setFilter] = useState('All');
+        const [sort, setSort] = useState('Newest');
+        const [search, setSearch] = useState('');
+        const [selectedIssue, setSelectedIssue] = useState(null);
+        const [toast, setToast] = useState(null);
+        const searchRef = useRef();
+        useEffect(() => { if (searchRef.current) searchRef.current.focus(); }, []);
+
+        const authorities = [{ id: 1, name: 'Jaipur Mun Corp.' }, { id: 2, name: 'Clean Foundation' }, { id: 3, name: 'Urban Trust' }];
+        const getStatusHistory = (issue) => [{ status: 'Active', date: issue.date }, ...(issue.status !== 'Active' ? [{ status: issue.status, date: new Date(new Date(issue.date).getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().slice(0,10) }] : [])];
+        const getComments = (issue) => [{ user: 'Authority', text: 'We have received your complaint.', date: issue.date }, ...(issue.status !== 'Active' ? [{ user: 'Authority', text: 'Work is in progress.', date: new Date(new Date(issue.date).getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().slice(0,10) }] : [])];
+
+        let userIssues = allIssues?.filter(i => i.reporter === 'user1');
+        if (filter !== 'All') userIssues = userIssues.filter(issue => issue.status === filter);
+        if (search) userIssues = userIssues.filter(issue => issue.title.toLowerCase().includes(search.toLowerCase()));
+        if (sort === 'Newest') userIssues?.sort((a, b) => new Date(b.date) - new Date(a.date));
+        if (sort === 'Oldest') userIssues?.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        const filters = ['All', 'Active', 'In Progress', 'Pending', 'Resolved'];
+
+        return (
+            <div className="container" aria-label="My Reported Issues">
+                <div className="header"><h1 className="headerTitle">My Reported Issues</h1></div>
+                <div style={{ padding: '0 20px', marginBottom: 18 }}>
+                    <input ref={searchRef} className="addIssueInput" placeholder="Search by title..." value={search} onChange={e => setSearch(e.target.value)} />
+                </div>
+                <div className="filterContainer">
+                    {filters.map(f => ( 
+                        <button key={f} className={`filterButton ${filter === f ? 'filterButtonActive' : ''}`} onClick={() => setFilter(f)}>
+                            <span className={`filterButtonText ${filter === f ? 'filterButtonTextActive' : ''}`}>{f}</span>
+                        </button> 
+                    ))}
+                </div>
+                <div className="listScrollView" role="list">
+                    {userIssues?.length > 0 ? userIssues.map(item => (
+                        <div key={item.id} className="issueListItemV2" tabIndex={0} role="listitem" onClick={() => setSelectedIssue(item)}>
+                            <img src={item.image} className="issueListImageV2" alt={item.title}/>
+                            <div className="issueListInfoV2">
+                                <p className="issueListTitleV2">{item.title}</p>
+                                <p className="issueListCategoryV2">{item.category}</p>
+                                <div className="issueListFooterV2">
+                                    <span style={{background: STATUS_COLORS[item.status] || STATUS_COLORS.default}}>{item.status}</span>
+                                    <span>{item.upvotes} upvotes</span>
+                                </div>
+                            </div>
+                        </div>
+                    )) : <div style={{textAlign: 'center', color: '#6B7280', marginTop: 40}}>No issues found.</div>}
+                </div>
+                {selectedIssue && (
+                    <MyIssueDetailModal
+                        issue={selectedIssue}
+                        onClose={() => setSelectedIssue(null)}
+                        statusHistory={getStatusHistory(selectedIssue)}
+                        comments={getComments(selectedIssue)}
+                        authority={authorities[selectedIssue.id % authorities.length]}
+                        showToast={setToast}
+                    />
+                )}
+                {toast && <Toast message={toast} onClose={() => setToast(null)} />}
+            </div>
+        );
+    };
+
     const LeaderboardScreen = ({ data }) => { 
         const LeaderboardCard = ({item, rank}) => ( <div className="leaderboardCard"> <span className="leaderboardRank">#{rank}</span> <div className="leaderboardInfo"> <p className="leaderboardName">{item.name}</p> <p className="leaderboardResolved">{item.resolved} issues resolved</p> </div> <span className="leaderboardScore">{item.score.toFixed(1)} ★</span> </div> );
         return ( <div className="container"> <div className="header"><h1 className="headerTitle">Performance Leaderboard</h1></div> <div className="listScrollView"> <h2 className="leaderboardSectionTitle">Top Performing NGOs</h2> {data?.ngos?.sort((a,b) => b.score - a.score).map((item, index) => <LeaderboardCard key={`ngo-${item.id}`} item={item} rank={index + 1} />)} <h2 className="leaderboardSectionTitle">Municipal Corporations</h2> {data?.municipalities?.sort((a,b) => b.score - a.score).map((item, index) => <LeaderboardCard key={`mun-${item.id}`} item={item} rank={index + 1} />)} </div> </div> ); 
     };
     const ProfileScreen = () => ( <div className="container"> <div className="header"><h1 className="headerTitle">Profile</h1></div> <div className="profileContent"> <div className="profileAvatar"><span className="profileAvatarText">A</span></div> <h2 className="profileName">Ansh</h2> <p className="profileEmail">ansh.sih2024@test.com</p> <button className="profileButton"><span className="profileButtonText">Edit Profile</span></button> <button className="profileButton"><span className="profileButtonText">Settings</span></button> <button className="profileButton" style={{borderColor: '#EF4444'}}><span className="profileButtonText" style={{color: '#EF4444'}}>Log Out</span></button> </div> </div> );
     
-    if (isLoading) {
+    if (isLoading || !appData) {
         return <div className="container" style={{justifyContent: 'center', alignItems: 'center'}}><div className="spinner geminiSpinner" style={{width: 50, height: 50, borderColor: '#4F46E5', borderTopColor: 'transparent'}}></div></div>;
     }
 
     const renderScreen = () => { 
         switch (activeScreen) { 
-            // MODIFIED: Pass all required props to HomeScreen
             case 'Home': return <HomeScreen issues={appData.issues} handleUpvote={handleUpvote} setActiveScreen={setActiveScreen} />; 
             case 'My Issues': return <MyIssuesScreen allIssues={appData.issues} />; 
             case 'Leaderboard': return <LeaderboardScreen data={appData.leaderboard} />; 
@@ -258,10 +410,11 @@ const AppContent = () => {
     const NavItem = ({ screenName, Icon, label }) => ( <div className="navItem" onClick={() => setActiveScreen(screenName)}> <Icon active={activeScreen === screenName} /> <span className={`navLabel ${activeScreen === screenName && 'navLabelActive'}`}>{label}</span> </div> );
     
     return (
-        <div className="safeArea">
-            {renderScreen()}
+        <div className="phone-container">
+            <div className="safeArea">
+                {renderScreen()}
+            </div>
             <div className="fab" onClick={() => setShowAddIssueModal(true)}><PlusIcon/></div>
-            {/* MODIFIED: This is the navBar with the Profile tab removed */}
             <div className="navBar">
                 <NavItem screenName="Home" Icon={HomeIcon} label="Home" />
                 <NavItem screenName="My Issues" Icon={IssuesIcon} label="My Issues" />
