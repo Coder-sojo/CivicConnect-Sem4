@@ -12,64 +12,46 @@ const LeaderboardIcon = ({ active }) => ( <svg width="24" height="24" viewBox="0
 const ProfileIcon = ({ active }) => ( <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke={active ? '#4F46E5' : '#111827'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 11a4 4 0 100-8 4 4 0 000 8z" stroke={active ? '#4F46E5' : '#111827'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg> );
 const PlusIcon = () => ( <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg> );
 
-// --- MOCK DATA (used for first time load) ---
-// FRIEND'S CHANGES: Added 'date' property and more issues
+// --- MOCK DATA (MODIFIED with 'scope' property) ---
 const initialIssues = [
-    { id: 1, title: "Severe Pothole on Tonk Road", category: "Roads", lat: 26.8500, lon: 75.8000, status: "Active", upvotes: 12, reporter: 'user1', image: 'https://images.pexels.com/photos/19131580/pexels-photo-19131580/free-photo-of-a-man-riding-a-scooter-on-a-dirt-road.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-01' },
-    { id: 2, title: "Flickering Streetlight in Malviya Nagar", category: "Utilities", lat: 26.8525, lon: 75.8050, status: "In Progress", upvotes: 5, reporter: 'user2', image: 'https://images.pexels.com/photos/1519753/pexels-photo-1519753.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-02' },
-    { id: 3, title: "Garbage Dump near Market", category: "Waste", lat: 26.8480, lon: 75.8020, status: "Resolved", upvotes: 25, reporter: 'user3', image: 'https://images.pexels.com/photos/1109349/pexels-photo-1109349.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-07-28' },
-    { id: 4, title: "Auto Rickshaw Blocking Lane", category: "Traffic", lat: 26.8510, lon: 75.7990, status: "Active", upvotes: 8, reporter: 'user1', image: 'https://images.pexels.com/photos/16301321/pexels-photo-16301321/free-photo-of-auto-rickshaw-on-a-street-in-india.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-03' },
-    { id: 5, title: "Leaking Water Pipe on Sidewalk", category: "Utilities", lat: 26.8550, lon: 75.8100, status: "Pending", upvotes: 3, reporter: 'user4', image: 'https://images.pexels.com/photos/2059045/pexels-photo-2059045.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-04' },
-    { id: 6, title: "Broken Traffic Signal at Gopalpura", category: "Traffic", lat: 26.8600, lon: 75.8100, status: "In Progress", upvotes: 7, reporter: 'user1', image: 'https://images.pexels.com/photos/356830/pexels-photo-356830.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-05' },
-    { id: 7, title: "Overflowing Drain in Vaishali Nagar", category: "Waste", lat: 26.8620, lon: 75.8120, status: "Pending", upvotes: 4, reporter: 'user1', image: 'https://images.pexels.com/photos/533451/pexels-photo-533451.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-06' },
-    { id: 8, title: "Street Flooding after Rain", category: "Roads", lat: 26.8640, lon: 75.8140, status: "Resolved", upvotes: 15, reporter: 'user1', image: 'https://images.pexels.com/photos/110874/pexels-photo-110874.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-07-30' },
-    { id: 9, title: "Damaged Park Bench", category: "Utilities", lat: 26.8660, lon: 75.8160, status: "In Progress", upvotes: 2, reporter: 'user1', image: 'https://images.pexels.com/photos/164634/pexels-photo-164634.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-07' },
-    { id: 10, title: "Illegal Dumping in Open Plot", category: "Waste", lat: 26.8680, lon: 75.8180, status: "Resolved", upvotes: 10, reporter: 'user1', image: 'https://images.pexels.com/photos/208349/pexels-photo-208349.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-07-25' }
+    { id: 1, title: "Severe Pothole on Tonk Road", scope: 'local', category: "Roads", lat: 26.8500, lon: 75.8000, status: "Active", upvotes: 13, reporter: 'user1', image: 'https://images.pexels.com/photos/19131580/pexels-photo-19131580/free-photo-of-a-man-riding-a-scooter-on-a-dirt-road.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-01' },
+    { id: 2, title: "Flickering Streetlight in Malviya Nagar", scope: 'local', category: "Utilities", lat: 26.8525, lon: 75.8050, status: "In Progress", upvotes: 5, reporter: 'user2', image: 'https://images.pexels.com/photos/1519753/pexels-photo-1519753.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-02' },
+    { id: 4, title: "Auto Rickshaw Blocking Lane", scope: 'local', category: "Traffic", lat: 26.8510, lon: 75.7990, status: "Active", upvotes: 8, reporter: 'user1', image: 'https://images.pexels.com/photos/16301321/pexels-photo-16301321/free-photo-of-auto-rickshaw-on-a-street-in-india.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-03' },
+    { id: 6, title: "Broken Traffic Signal at Gopalpura", scope: 'city', category: "Traffic", lat: 26.8600, lon: 75.8100, status: "In Progress", upvotes: 7, reporter: 'user1', image: 'https://images.pexels.com/photos/356830/pexels-photo-356830.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-05' },
+    { id: 5, title: "Leaking Water Pipe on Main Sidewalk", scope: 'city', category: "Utilities", lat: 26.8550, lon: 75.8100, status: "Pending", upvotes: 3, reporter: 'user4', image: 'https://images.pexels.com/photos/2059045/pexels-photo-2059045.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-04' },
+    { id: 3, title: "Garbage Dump near City Market", scope: 'city', category: "Waste", lat: 26.8480, lon: 75.8020, status: "Resolved", upvotes: 25, reporter: 'user3', image: 'https://images.pexels.com/photos/1109349/pexels-photo-1109349.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-07-28' },
+    { id: 7, title: "Urgent Repair Needed on State Highway 25", scope: 'state', category: "Roads", lat: 26.8620, lon: 75.8120, status: "Pending", upvotes: 42, reporter: 'user1', image: 'https://images.pexels.com/photos/533451/pexels-photo-533451.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-06' },
+    { id: 8, title: "State-wide Power Grid Instability", scope: 'state', category: "Utilities", lat: 26.8640, lon: 75.8140, status: "In Progress", upvotes: 150, reporter: 'user1', image: 'https://images.pexels.com/photos/110874/pexels-photo-110874.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-07-30' },
+    { id: 9, title: "National Highway Toll Booth Malfunction", scope: 'country', category: "Traffic", lat: 26.8660, lon: 75.8160, status: "In Progress", upvotes: 520, reporter: 'user1', image: 'https://images.pexels.com/photos/164634/pexels-photo-164634.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-08-07' },
+    { id: 10, title: "Policy suggestion for nationwide waste management", scope: 'country', category: "Waste", lat: 26.8680, lon: 75.8180, status: "Active", upvotes: 1080, reporter: 'user1', image: 'https://images.pexels.com/photos/208349/pexels-photo-208349.jpeg?auto=compress&cs=tinysrgb&w=600', date: '2024-07-25' }
 ];
+
 const ngos = [ { id: 1, name: 'Clean Jaipur Foundation', score: 4.8, resolved: 124 }, { id: 2, name: 'Green Rajasthan Initiative', score: 4.6, resolved: 98 }, { id: 3, name: 'Urban Development Trust', score: 4.2, resolved: 75 } ];
 const municipalities = [ { id: 1, name: 'Jaipur Municipal Corp.', score: 3.9, resolved: 567 }, { id: 2, name: 'Sanganer Tehsil', score: 3.5, resolved: 342 }, { id: 3, name: 'Amer Tehsil', score: 3.2, resolved: 210 } ];
 
 // --- LOCAL STORAGE SERVICE (CORRECTED) ---
 const STORAGE_KEY = 'civicConnectData';
-const DATA_VERSION = 1; // Increment this when you want to force refresh of initial data
+const DATA_VERSION = 1;
 
 const storageService = {
     getData: () => {
         try {
             const data = localStorage.getItem(STORAGE_KEY);
             const parsedData = data ? JSON.parse(data) : null;
-            
-            // Always use the latest initialIssues from code, but preserve user additions and upvote changes
-            const defaultData = { 
-                issues: [...initialIssues], 
-                leaderboard: { ngos, municipalities },
-                version: DATA_VERSION
-            };
-            
+            const defaultData = { issues: [...initialIssues], leaderboard: { ngos, municipalities }, version: DATA_VERSION };
             if (parsedData && parsedData.version === DATA_VERSION) {
-                // Keep user modifications (upvotes) and user-added issues
-                const userAddedIssues = parsedData.issues.filter(issue => 
-                    !initialIssues.find(initial => initial.id === issue.id)
-                );
-                
-                // Update initial issues with any upvote changes
+                const userAddedIssues = parsedData.issues.filter(issue => !initialIssues.find(initial => initial.id === issue.id));
                 const updatedInitialIssues = initialIssues.map(initial => {
                     const existing = parsedData.issues.find(issue => issue.id === initial.id);
                     return existing ? { ...initial, upvotes: existing.upvotes } : initial;
                 });
-                
                 defaultData.issues = [...updatedInitialIssues, ...userAddedIssues];
             }
-            
             localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
             return defaultData;
         } catch (error) {
             console.error("Error accessing localStorage:", error);
-            return { 
-                issues: initialIssues, 
-                leaderboard: { ngos, municipalities },
-                version: DATA_VERSION
-            };
+            return { issues: initialIssues, leaderboard: { ngos, municipalities }, version: DATA_VERSION };
         }
     },
     saveData: (data) => {
@@ -117,21 +99,19 @@ const MapComponent = ({ issues }) => {
 };
 
 // --- SCREENS & COMPONENTS ---
+
+// NEW: HomeScreen - Completely revamped to replace the carousel with a tabbed interface.
 const HomeScreen = ({ issues, handleUpvote, setActiveScreen }) => {
     const [selectedIssue, setSelectedIssue] = useState(null);
-    const IssueCard = ({ issue, onClick }) => (
-        <div className="carouselCard" onClick={() => onClick(issue)}>
-            <img src={issue.image} className="cardImage" alt={issue.title} />
-            <div className="cardOverlay">
-                <div>
-                    <p className="cardTitle">{issue.title}</p>
-                    <div className="cardFooter">
-                        <span className="cardUpvotes">{issue.upvotes} Upvotes</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+    const [activeScope, setActiveScope] = useState('Local');
+    const scopes = ['Local', 'City', 'State', 'Country'];
+
+    const STATUS_COLORS = { Active: '#EF4444', 'In Progress': '#F59E42', Pending: '#A78BFA', Resolved: '#10B981', default: '#A1A1AA' };
+
+    const filteredIssues = issues
+        .filter(issue => issue.scope?.toLowerCase() === activeScope.toLowerCase() && issue.status !== 'Resolved')
+        .sort((a, b) => b.upvotes - a.upvotes);
+
     return (
         <div className="container">
             <div className="appHeader">
@@ -140,12 +120,36 @@ const HomeScreen = ({ issues, handleUpvote, setActiveScreen }) => {
                 <div className="headerIcon" onClick={() => setActiveScreen('Profile')}><ProfileIcon active={false} /></div>
             </div>
             <MapComponent issues={issues} />
-            <div className="carouselContainer">
-                <h2 className="carouselTitle">Trending Near You</h2>
-                <div className="carousel">
-                    {issues && issues.filter(i => i.status !== 'Resolved').map(issue => <IssueCard key={issue.id} issue={issue} onClick={setSelectedIssue} />)}
+            
+            <div className="issuesScopeContainer">
+                <div className="scopeTabsContainer">
+                    {scopes.map(scope => (
+                        <button 
+                            key={scope}
+                            className={`scopeTab ${activeScope === scope ? 'scopeTabActive' : ''}`}
+                            onClick={() => setActiveScope(scope)}
+                        >
+                            {scope}
+                        </button>
+                    ))}
+                </div>
+                <div className="listScrollView noPadding">
+                    {filteredIssues.length > 0 ? filteredIssues.map(item => (
+                        <div key={item.id} className="issueListItemV2" tabIndex={0} onClick={() => setSelectedIssue(item)}>
+                            <img src={item.image} className="issueListImageV2" alt={item.title}/>
+                            <div className="issueListInfoV2">
+                                <p className="issueListTitleV2">{item.title}</p>
+                                <p className="issueListCategoryV2">{item.category}</p>
+                                <div className="issueListFooterV2">
+                                    <span style={{background: STATUS_COLORS[item.status] || STATUS_COLORS.default}}>{item.status}</span>
+                                    <span>{item.upvotes} upvotes</span>
+                                </div>
+                            </div>
+                        </div>
+                    )) : <div style={{textAlign: 'center', color: '#6B7280', marginTop: 40}}>No issues found for this scope.</div>}
                 </div>
             </div>
+
             {selectedIssue && <IssueModal issue={selectedIssue} onClose={() => setSelectedIssue(null)} onUpvote={handleUpvote} />}
         </div>
     );
@@ -202,7 +206,7 @@ const AddIssueModal = ({ onClose, onAddIssue }) => {
     }, []);
     const handleGenerate = async () => { setIsGenerating(true); const result = await geminiApiService.generateDescriptionFromImage(null); setTitle(result.title); setDescription(result.description); setIsGenerating(false); };
     const handleSubmit = () => {
-        const newIssue = { title, description, category: "Uncategorized", lat: 26.85 + (Math.random() - 0.5) * 0.1, lon: 75.80 + (Math.random() - 0.5) * 0.1, image: 'https://images.pexels.com/photos/162553/office-work-business-creative-162553.jpeg?auto=compress&cs=tinysrgb&w=600' };
+        const newIssue = { title, description, category: "Uncategorized", scope: "local", lat: 26.85 + (Math.random() - 0.5) * 0.1, lon: 75.80 + (Math.random() - 0.5) * 0.1, image: 'https://images.pexels.com/photos/162553/office-work-business-creative-162553.jpeg?auto=compress&cs=tinysrgb&w=600' };
         onAddIssue(newIssue);
     };
     return (
@@ -229,6 +233,10 @@ const AddIssueModal = ({ onClose, onAddIssue }) => {
         </div>
     );
 };
+
+// NEW: Shared constants moved outside the AppContent component
+const CATEGORY_COLORS = { Roads: '#F59E42', Utilities: '#3B82F6', Waste: '#10B981', Traffic: '#F43F5E', default: '#A1A1AA' };
+const STATUS_COLORS = { Active: '#EF4444', 'In Progress': '#F59E42', Pending: '#A78BFA', Resolved: '#10B981', default: '#A1A1AA' };
         
 const AppContent = () => {
     const [activeScreen, setActiveScreen] = useState('Home');
@@ -260,10 +268,6 @@ const AppContent = () => {
         handleDataUpdate({ ...appData, issues: updatedIssues });
         setShowAddIssueModal(false);
     };
-
-    // FRIEND'S CHANGES: These constants and new components are for the enhanced MyIssuesScreen
-    const CATEGORY_COLORS = { Roads: '#F59E42', Utilities: '#3B82F6', Waste: '#10B981', Traffic: '#F43F5E', default: '#A1A1AA' };
-    const STATUS_COLORS = { Active: '#EF4444', 'In Progress': '#F59E42', Pending: '#A78BFA', Resolved: '#10B981', default: '#A1A1AA' };
 
     const Toast = ({ message, onClose }) => {
         useEffect(() => {
@@ -322,7 +326,6 @@ const AppContent = () => {
         );
     };
     
-    // CORRECTED MyIssuesScreen with proper CSS classes
     const MyIssuesScreen = ({ allIssues }) => {
         const [filter, setFilter] = useState('All');
         const [sort, setSort] = useState('Newest');
