@@ -38,6 +38,36 @@ body {
 .header { padding: 20px; background-color: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,0.02); z-index: 10; }
 .headerTitle { font-size: 28px; font-weight: 800; color: #111827; }
 .headerSubtitle { font-size: 15px; color: #6B7280; }
+
+/*
+ * --- START OF ADDED STYLES ---
+ * These are the new styles for the Google News-style header
+ */
+.appHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    z-index: 10;
+    height: 60px; /* Giving it a fixed height */
+    box-sizing: border-box; /* Ensures padding is included in the height */
+}
+
+.headerLogoTitle {
+    font-size: 22px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.headerIcon {
+    cursor: pointer;
+    padding: 5px;
+}
+/* --- END OF ADDED STYLES --- */
+
+
 .map-container { width: 100%; height: 450px; background-color: #E5E7EB; position: relative; }
 /* Leaflet Map Styling */
 .leaflet-container { width: 100%; height: 100%; }
@@ -141,4 +171,3 @@ body {
 .splash-screen { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #FFFFFF; animation: fadeOut 0.5s ease-in 2.5s forwards; }
 @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; visibility: hidden; } }
 .splash-logo { max-width: 250px; }
-
