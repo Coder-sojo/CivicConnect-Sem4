@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './style.css';
+// Import the Google Generative AI SDK
+import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from '@google/generative-ai';
 
 // --- ICONS & LOGO ---
 const UserLogo = () => {
     return <img src="/logo.png" alt="CivicConnect Logo" className="splash-logo" />;
 };
-const SearchIcon = () => ( <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="#111827" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M21 21L16.65 16.65" stroke="#111827" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> );
+const SearchIcon = () => ( <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 3 11C3 15.4183 6.58172 19 11 19Z" stroke="#111827" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M21 21L16.65 16.65" stroke="#111827" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> );
 const HomeIcon = ({ active }) => ( <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke={active ? '#4F46E5' : '#6B7280'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M9 22V12h6v10" stroke={active ? '#4F46E5' : '#6B7280'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg> );
 const IssuesIcon = ({ active }) => ( <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke={active ? '#4F46E5' : '#6B7280'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg> );
 const LeaderboardIcon = ({ active }) => ( <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 20V10M18 20V4M6 20v-4" stroke={active ? '#4F46E5' : '#6B7280'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg> );
@@ -64,9 +66,89 @@ const storageService = {
     }
 };
 
-// --- MOCK API & GEMINI SERVICES ---
+// --- GEMINI API INTEGRATION ---
+// IMPORTANT: Replace 'YOUR_GEMINI_API_KEY' with your actual API key
+// For client-side, consider using environment variables and ensuring it's safe to expose.
+// In a production app, you would typically proxy this through your own backend for security.
+const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY || 'AIzaSyCyo31JWOWATeZ74Vv80EhXDb1Pg7GM4aA';
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+
+// Helper function to convert a Data URL to a Gemini GenerativeContent.Part
+function fileToGenerativePart(dataUrl) {
+    const [mimeType, base64Data] = dataUrl.split(';base64,');
+    return {
+        inlineData: {
+            data: base64Data,
+            mimeType: mimeType.replace('data:', '')
+        },
+    };
+}
+
 const geminiApiService = {
-    generateDescriptionFromImage: async (image) => new Promise(resolve => setTimeout(() => resolve({ title: "Overflowing Garbage Near Public Park", description: "A large public garbage bin located near the main entrance of the community park is overflowing..." }), 1500)),
+    generateDescriptionFromImage: async (imageDataUrl) => {
+        if (!imageDataUrl) {
+            return { title: "No Image Provided", description: "Please upload an image to generate a complaint." };
+        }
+
+        try {
+            const model = genAI.getGenerativeModel({
+                model: "gemini-1.5-pro-latest",
+                safetySettings: [
+                    {
+                        category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+                        threshold: HarmBlockThreshold.BLOCK_NONE,
+                    },
+                    {
+                        category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+                        threshold: HarmBlockThreshold.BLOCK_NONE,
+                    },
+                    {
+                        category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+                        threshold: HarmBlockThreshold.BLOCK_NONE,
+                    },
+                    {
+                        category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+                        threshold: HarmBlockThreshold.BLOCK_NONE,
+                    },
+                ],
+            });
+
+            const imagePart = fileToGenerativePart(imageDataUrl);
+
+            const prompt = "Analyze this image and generate a concise complaint title (maximum 7 words) and a detailed description. Format the output as a JSON object with 'title' and 'description' keys. Example: { \"title\": \"Pothole on Main Road\", \"description\": \"There is a large pothole...\" }";
+
+            const result = await model.generateContent([prompt, imagePart]);
+            const response = await result.response;
+            const text = response.text();
+
+            // Attempt to parse JSON. If parsing fails, handle gracefully.
+            try {
+                const parsedResult = JSON.parse(text);
+                // Ensure title length is not more than 7 words
+                const titleWords = parsedResult.title.split(' ');
+                const formattedTitle = titleWords.length > 7 ? titleWords.slice(0, 7).join(' ') + '...' : parsedResult.title;
+
+                return {
+                    title: formattedTitle,
+                    description: parsedResult.description
+                };
+            } catch (jsonError) {
+                console.error("Failed to parse Gemini response as JSON:", text, jsonError);
+                // Fallback if Gemini doesn't return perfect JSON
+                return {
+                    title: "AI Generation Error: Check Console",
+                    description: `Could not parse AI response. Raw output: ${text}`
+                };
+            }
+
+        } catch (error) {
+            console.error("Error generating description from image with Gemini:", error);
+            return {
+                title: "AI Generation Failed",
+                description: "Could not generate complaint details. Please try again or enter manually."
+            };
+        }
+    },
     draftOfficialComplaint: async (issue) => new Promise(resolve => setTimeout(() => resolve(`To,\nThe Commissioner,\nJaipur Municipal Corporation,\n\nSubject: Formal Complaint - "${issue.title}"\n\nRespected Sir/Madam,\n\nThis is to bring to your attention the issue titled "${issue.title}", with ${issue.upvotes} upvotes. Please take action.\n\nSincerely,\nA Concerned Citizen`), 1500))
 };
 const mockApiService = {
@@ -115,11 +197,18 @@ const HomeScreen = ({ issues, handleUpvote, setActiveScreen }) => {
     return (
         <div className="container">
             <div className="appHeader">
-                <div className="headerIcon"><SearchIcon /></div>
-                <h2 className="headerLogoTitle">CivicConnect</h2>
-                <div className="headerIcon" onClick={() => setActiveScreen('Profile')}><ProfileIcon active={false} /></div>
+                {/* Top-left homepage logo (served from public/) */}
+                <img
+                    src={`${process.env.PUBLIC_URL}/HomePage Logo.png`}
+                    alt="CivicConnect"
+                    className="headerTopLeftLogo"
+                />
+                {/* Account icon on the top-right */}
+                <div className="headerIcon" onClick={() => setActiveScreen('Profile')}>
+                    <ProfileIcon active={false} />
+                </div>
             </div>
-            <MapComponent issues={issues} />
+             <MapComponent issues={issues} />
             
             <div className="issuesScopeContainer">
                 <div className="scopeTabsContainer">
@@ -200,35 +289,116 @@ const AddIssueModal = ({ onClose, onAddIssue }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
+
+    // NEW: image picker state & ref
+    const fileInputRef = useRef(null);
+    const [selectedImageDataUrl, setSelectedImageDataUrl] = useState(null);
+    const [selectedFileName, setSelectedFileName] = useState(null);
+
     useEffect(() => {
         const getAvgTime = async () => { const time = await mockApiService.getAverageResponseTime("303007"); setResponseTime(time.days); };
         getAvgTime();
     }, []);
-    const handleGenerate = async () => { setIsGenerating(true); const result = await geminiApiService.generateDescriptionFromImage(null); setTitle(result.title); setDescription(result.description); setIsGenerating(false); };
+
+    // NEW: simple local "Generate" that sets preset title & description
+    const handleFakeGenerate = () => {
+        setTitle('Potholes');
+        setDescription('The road is riddled with numerous potholes across both lanes, causing vehicles to swerve and slowing traffic. Immediate repair is required to prevent accidents and further damage to vehicles.');
+    };
+
+    // NEW: open native file picker
+    const openFilePicker = () => {
+        if (fileInputRef.current) fileInputRef.current.click();
+    };
+
+    // NEW: read selected image and store data URL for preview & upload
+    const handleFileChange = (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        setSelectedFileName(file.name);
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            setSelectedImageDataUrl(ev.target.result);
+        };
+        reader.readAsDataURL(file);
+    };
+
     const handleSubmit = () => {
-        const newIssue = { title, description, category: "Uncategorized", scope: "local", lat: 26.85 + (Math.random() - 0.5) * 0.1, lon: 75.80 + (Math.random() - 0.5) * 0.1, image: 'https://images.pexels.com/photos/162553/office-work-business-creative-162553.jpeg?auto=compress&cs=tinysrgb&w=600' };
+        const newIssue = { 
+            title, 
+            description, 
+            category: "Uncategorized", // Can be AI-generated later
+            scope: "local", // Can be AI-generated later
+            lat: 26.85 + (Math.random() - 0.5) * 0.1, 
+            lon: 75.80 + (Math.random() - 0.5) * 0.1, 
+            // use selected image if provided otherwise fallback to placeholder
+            image: selectedImageDataUrl || 'https://images.pexels.com/photos/162553/office-work-business-creative-162553.jpeg?auto=compress&cs=tinysrgb&w=600' 
+        };
         onAddIssue(newIssue);
     };
+
     return (
-        <div className="modalBackdrop">
-            <div className="addIssueModal">
+        <div className="modalBackdrop" onClick={onClose}>
+            <div className="addIssueModal" onClick={(e) => e.stopPropagation()}>
                 <h2 className="addIssueTitle">Report a New Issue</h2>
                 <label className="addIssueLabel">Upload Photo</label>
-                <div className="addIssueImagePicker"><span className="addIssueImagePickerText">Tap to select an image</span></div>
-                <button className="modalButton geminiButton" onClick={handleGenerate} disabled={isGenerating}>
+
+                {/* Hidden native file input */}
+                <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={handleFileChange}
+                />
+
+                {/* Clickable picker - now opens file dialog and shows preview */}
+                <div className="addIssueImagePicker" onClick={openFilePicker} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openFilePicker(); }}>
+                    {selectedImageDataUrl ? (
+                        <img src={selectedImageDataUrl} alt={selectedFileName || 'Selected image'} style={{ width: '100%', height: 180, objectFit: 'cover', borderRadius: 12 }} />
+                    ) : (
+                        <span className="addIssueImagePickerText">Tap to select an image</span>
+                    )}
+                </div>
+
+                {/* CHANGED: Make the AI button set a preset title & description */}
+                <button
+                    className="modalButton geminiButton"
+                    type="button"
+                    onClick={handleFakeGenerate}
+                    title="Generate preset title and description"
+                    style={{ cursor: 'pointer' }}
+                >
                     <span className="modalButtonText geminiButtonText">✨ Generate with AI</span>
-                    {isGenerating && <div className="spinner geminiSpinner"></div>}
                 </button>
                 <label className="addIssueLabel">Location</label>
-                <div className="addIssueLocation"><span className="addIssueLocationText">Dahmi Kalan, Rajasthan</span></div>
+                <div className="addIssueLocation">
+                    <span className="addIssueLocationText">Dahmi Kalan, Rajasthan</span>
+                </div>
                 {responseTime && <p className="responseTimeText">💡 Estimated response time in this area: ~{responseTime} days</p>}
                 <label className="addIssueLabel">Title</label>
-                <input className="addIssueInput" placeholder="A clear title for the issue" value={title} onChange={e => setTitle(e.target.value)} />
+                <input
+                    className="addIssueInput"
+                    placeholder="A clear title for the issue"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    maxLength={7 * 5} // Roughly 7 words, assuming average 5 chars per word + spaces
+                />
                 <label className="addIssueLabel">Description</label>
-                <textarea className="addIssueInput" style={{height: 100}} placeholder="Describe the issue in detail..." value={description} onChange={e => setDescription(e.target.value)} />
-                <div style={{flex: 1}}></div>
-                <button className="modalButton addIssueSubmitButton" onClick={handleSubmit}><span className="modalButtonText">Submit Issue</span></button>
-                <button className="addIssueCloseButton" onClick={onClose}><span className="addIssueCloseButtonText">Cancel</span></button>
+                <textarea
+                    className="addIssueInput"
+                    style={{ height: 100 }}
+                    placeholder="Describe the issue in detail..."
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                />
+                <div style={{ flex: 1 }}></div>
+                <button className="modalButton addIssueSubmitButton" onClick={handleSubmit} disabled={!title || !description}>
+                    <span className="modalButtonText">Submit Issue</span>
+                </button>
+                <button className="addIssueCloseButton" onClick={onClose}>
+                    <span className="addIssueCloseButtonText">Cancel</span>
+                </button>
             </div>
         </div>
     );
