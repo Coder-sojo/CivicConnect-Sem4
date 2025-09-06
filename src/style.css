@@ -64,9 +64,9 @@ body {
 
 .appHeader {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
+  justify-content: space-between;
+  padding: 12px 16px;
 }
 .headerLogoTitle { font-size: 22px; font-weight: 800; color: #111827; }
 .headerIcon { cursor: pointer; padding: 5px; }
@@ -165,26 +165,68 @@ body {
 }
 .fab:hover { transform: scale(1.06); }
 
-/* Modal */
+/* Modal - force full-screen backdrop and opaque white modal surfaces */
 .modalBackdrop {
-  position: fixed;
+  position: fixed; /* cover whole viewport */
   inset: 0;
   background-color: rgba(0,0,0,0.6);
-  display:flex; justify-content:center; align-items:flex-end; z-index:1000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 10050; /* very high to avoid stacking issues */
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  isolation: isolate; /* prevent blending with underlying stacking contexts */
+  pointer-events: auto;
 }
+
+/* Generic modal card */
 .modalView {
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-  background: #fff;
+  background-color: #ffffff !important; /* explicit opaque white */
+  color: #111827;
   border-radius: 24px 24px 0 0;
   padding: 25px;
-  box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
-  animation: slideUp .28s ease-out;
-  display: flex;
-  flex-direction: column;
   align-items: center;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 520px;
+  box-sizing: border-box;
+  animation: slideUp 0.28s ease-out;
+  position: relative;
+  z-index: 10051; /* above the backdrop */
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  background-clip: padding-box;
+  border: 1px solid rgba(0,0,0,0.04);
 }
+
+/* Add Issue modal was missing an opaque background and border-radius */
+.addIssueModal {
+  background-color: #ffffff !important;
+  border-radius: 24px 24px 0 0;
+  max-height: 95vh;
+  overflow-y: auto;
+  align-items: center;
+  padding: 25px;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.18);
+  width: 100%;
+  max-width: 520px;
+  box-sizing: border-box;
+  z-index: 10051;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+/* keep modal children solid where needed */
+.modalImage,
+.addIssueImagePicker,
+.draftModalText {
+  background-clip: padding-box;
+}
+
+/* ensure slide animation still works */
 @keyframes slideUp { from { transform: translateY(100%);} to { transform: translateY(0);} }
 .modalImage { width:100%; height:180px; border-radius:16px; margin-bottom:20px; object-fit:cover; }
 .modalTitle { font-size:24px; font-weight:800; color:#111827; text-align:center; margin-bottom:8px; }
@@ -328,3 +370,59 @@ body {
 .splash-screen{ width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#fff; animation: fadeOut .5s ease-in 2.5s forwards; }
 @keyframes fadeOut{ from{opacity:1} to{opacity:0; visibility:hidden} }
 .splash-logo{ max-width:250px; }
+
+/* Header logo (small in header, larger on splash) */
+.headerLogo {
+  display: flex;
+  align-items: center;
+}
+
+/* Logo when shown in the header */
+.headerLogo .splash-logo {
+  height: 36px;       /* make logo smaller to fit header */
+  max-height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Keep the splash-screen version large */
+.splash-screen .splash-logo {
+  height: 140px;
+  width: auto;
+  max-width: 70%;
+  object-fit: contain;
+}
+
+/* Small screens tweak */
+@media (max-width: 420px) {
+  .headerLogo .splash-logo { height: 30px; max-height: 34px; }
+  .splash-screen .splash-logo { height: 110px; }
+}
+
+/* Small top-left logo shown on the HomeScreen header */
+.headerTopLeftLogo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  margin-right: 8px;
+}
+
+/* Ensure header items align and have spacing */
+.appHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+}
+
+/* Keep existing headerLogo behavior */
+.headerLogo {
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive tweak */
+@media (max-width: 420px) {
+  .headerTopLeftLogo { height: 30px; margin-right: 6px; }
+  .appHeader { padding: 10px 12px; }
+}
